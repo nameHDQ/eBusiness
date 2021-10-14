@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
+<mapper namespace="com.example.ebusiness.repository.admin.UserAndOrderAndOutRepository">
+
+    <select id="selectAllOrder" resultType="java.lang.Integer">
+        select count(*)
+        from shop.orderbasetable;
+    </select>
+    <select id="selectOrderByPage" resultType="java.util.Map">
+        select obt.*,bt.bemail
+        from shop.orderbasetable obt,shop.busertable bt
+        where obt.busertable_id = bt.id limit #{startIndex},#{pageSize};
+    </select>
+    <select id="selectAllUser" resultType="java.lang.Integer">
+        select count(*)
+        from shop.busertable;
+    </select>
+    <select id="selectUserByPage" resultType="com.example.ebusiness.entity.BUser">
+        select *
+        from shop.busertable limit #{startIndex},#{pageSize} ;
+    </select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
+<mapper namespace="com.example.ebusiness.repository.admin.GoodsRepository">
+    <insert id="addGoods" parameterType="com.example.ebusiness.entity.Goods">
+        insert into shop.goodstable(id, gname, goprice, grprice, gstore, gpicture, isRecommend, isAdvertisement, goodstype_id)
+        values (null,#{gname},#{goprice},#{grprice},#{gstore},#{gpicture},#{isRecommend},#{isAdvertisement},#{goodstype_id})
+    </insert>
+    <update id="updateGoods" parameterType="com.example.ebusiness.entity.Goods">
+        update shop.goodstable
+        set gname = #{gname},
+            goprice = #{goprice},
+            grprice = #{grprice},
+            gstore = #{gstore},
+            gpicture = #{gpicture},
+            isRecommend = #{isRecommend},
+            isAdvertisement = #{isAdvertisement},
+            goodstype_id = #{goodstype_id}
+        where id = #{id};
+    </update>
+    <delete id="deleteGoodsById" parameterType="integer">
+        delete
+        from shop.goodstable
+                 where id=#{id};
+    </delete>
+    <!--    &lt;!&ndash;更新物品&ndash;&gt;-->
+<!--    <update id="updateGoods" parameterType="Goods">-->
+<!--        -->
+<!--    </update>-->
+    <select id="selectAllGoodsType" resultType="com.example.ebusiness.entity.GoodsType">
+        select *
+        from shop.goodstype;
+    </select>
+    <select id="selectAllGoods" resultType="integer">
+        select count(*)
+        from  shop.goodstable;
+    </select>
+    <!-- 分页查询 -->
+    <select id="selectAllGoodsByPage" resultType="com.example.ebusiness.entity.Goods">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id
+        order by gt.id desc limit #{startIndex}, #{pageSize}
+    </select>
+    <select id="selectGoodById" parameterType="integer" resultType="com.example.ebusiness.entity.Goods">
+        select *
+        from shop.goodstable
+        where goodstable.id=#{id};
+    </select>
+    <!--查询订单细节是否关联物品-->
+    <select id="selectOrderGoods" resultType="map" parameterType="integer">
+        select *
+        from shop.orderdetail
+        where orderdetail.goodstable_id=#{id};
+    </select>
+    <!--查询购物车是否关联物品-->
+    <select id="selectCartGoods" resultType="java.util.Map" parameterType="integer">
+        select *
+        from shop.carttable
+        where carttable.goodstable_id = #{id};
+    </select>
+    <!--查询收藏表是否关联物品-->
+    <select id="selectFocusGoods" resultType="java.util.Map" parameterType="integer">
+        select *
+        from shop.focustable
+        where focustable.goodstable_id = #{id};
+    </select>
+
+</mapper>

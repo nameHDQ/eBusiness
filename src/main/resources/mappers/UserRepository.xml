@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.ebusiness.repository.before.UserRepository">
+    <insert id="register" parameterType="com.example.ebusiness.entity.BUser">
+        insert into shop.busertable (id, bemail, bpwd)
+        values (null,#{bemail},#{bpwd});
+    </insert>
+
+    <select id="selectUser" resultType="com.example.ebusiness.entity.BUser" parameterType="com.example.ebusiness.entity.BUser">
+        select *
+        from shop.busertable
+        where busertable.bemail = #{bemail};
+    </select>
+    <select id="login" resultType="com.example.ebusiness.entity.BUser" parameterType="com.example.ebusiness.entity.BUser">
+        select *
+        from shop.busertable
+        where busertable.bemail = #{bemail} and busertable.bpwd = #{bpwd};
+    </select>
+</mapper>

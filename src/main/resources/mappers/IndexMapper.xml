@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
+<mapper namespace="com.example.ebusiness.repository.before.IndexRepository">
+
+    <select id="selectGoodsType" resultType="com.example.ebusiness.entity.GoodsType">
+        select *
+        from shop.goodstype;
+    </select>
+    <select id="selectAdGoods" resultType="com.example.ebusiness.entity.Goods">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id and gt.isAdvertisement = 1
+        order by gt.id desc limit 5;
+    </select>
+<!--    模糊查询-->
+    <select id="selectMykeyGoods" resultType="com.example.ebusiness.entity.Goods">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id and gt.gname like concat('%',#{mykey},'%');
+    </select>
+    <select id="selectRecommendGoods" resultType="com.example.ebusiness.entity.Goods">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id and gt.isRecommend = 1
+        order by gt.id desc limit 6;
+    </select>
+    <select id="selectLastGoods" resultType="com.example.ebusiness.entity.Goods">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id
+        order by gt.id desc limit 6;
+    </select>
+    <select id="selectGoodsById" resultType="com.example.ebusiness.entity.Goods" parameterType="integer">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id and gt.id = #{id};
+    </select>
+    <select id="selectGoodsByType" resultType="com.example.ebusiness.entity.Goods">
+        select gt.*,gy.typename
+        from shop.goodstable gt,shop.goodstype gy
+        where gt.goodstype_id = gy.id and gy.id = #{id};
+    </select>
+</mapper>

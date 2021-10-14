@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.ebusiness.repository.before.CartRepository">
+    <insert id="focus" parameterType="integer">
+        insert into shop.focustable(id, goodstable_id, busertable_id, focustime)
+        values (null,#{id},#{uid},now());
+    </insert>
+    <insert id="putCart" parameterType="integer">
+        insert into shop.carttable(id, busertable_id, goodstable_id, shoppingnum)
+        values (null,#{uid},#{id},#{buyNumber});
+    </insert>
+    <update id="updateCart" parameterType="integer">
+        update shop.carttable
+            set  shoppingnum=(#{buyNumber}+shoppingnum)
+        where busertable_id = #{uid} and goodstable_id=#{id};
+    </update>
+    <delete id="deleteCart" parameterType="integer">
+        delete
+        from shop.carttable
+                 where busertable_id = #{uid} and goodstable_id = #{id};
+    </delete>
+    <delete id="clearCart" parameterType="integer">
+        delete
+        from shop.carttable
+                 where busertable_id=#{uid};
+    </delete>
+
+    <select id="isFoucs" resultType="java.util.Map" parameterType="integer">
+        select *
+        from shop.focustable
+        where focustable.goodstable_id = #{id} and focustable.busertable_id = #{uid};
+    </select>
+    <select id="isPutCart" resultType="java.util.Map" parameterType="integer">
+        select *
+        from shop.carttable
+        where carttable.busertable_id = #{uid} and carttable.goodstable_id = #{id};
+    </select>
+    <select id="selectCart" resultType="java.util.Map">
+        select gt.id,gt.gname,gt.gpicture,gt.grprice,ct.shoppingnum,ct.shoppingnum*gt.grprice smallsum
+        from shop.goodstable gt, shop.carttable ct
+        where ct.busertable_id = #{uid} and ct.goodstable_id = gt.id;
+    </select>
+    <select id="myFocus" resultType="java.util.Map" parameterType="integer">
+        select gt.id id,gt.grprice grprice,gt.gname gname,gt.goprice goprice,gt.gpicture gpicture
+        from shop.focustable fo,shop.goodstable gt
+        where fo.busertable_id=#{uid} and fo.goodstable_id = gt.id;
+    </select>
+    <select id="myOrder" resultType="com.example.ebusiness.entity.Order" parameterType="integer">
+        select *
+        from shop.orderbasetable
+        where busertable_id=#{uid};
+    </select>
+</mapper>
